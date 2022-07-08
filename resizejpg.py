@@ -1,6 +1,10 @@
 from PIL import Image, ImageOps
+
 import os
 from os import listdir
+
+import logging
+logging.basicConfig(filename = "log.txt", level = logging.DEBUG)
 
 imgFolder = './imgs'
 totalFiles = 0
@@ -18,16 +22,15 @@ for fileName in os.listdir(imgFolder):
     # CONFERE SE É REALMENTE UM ARQUIVO, E NÃO UMA PASTA
     if os.path.isfile(filePath):
         try:
-            image = Image.open(filePath)
-            image = ImageOps.exif_transpose(image) # MANTÉM A ORIENTAÇÃO DA IMAGEM ORIGINAL
+            with Image.open(filePath) as image:
+                image = ImageOps.exif_transpose(image) # MANTÉM A ORIENTAÇÃO DA IMAGEM ORIGINAL
 
-            image.thumbnail((maxSize,maxSize)) # APLICA maxSize NO MAIOR LADO E MANTÉM A PROPORÇÃO ORIGINAL
-            image.save(f'{imgFolder}/newsize/{fileName}')
+                image.thumbnail((maxSize,maxSize)) # APLICA maxSize NO MAIOR LADO E MANTÉM A PROPORÇÃO ORIGINAL
+                image.save(f'{imgFolder}/newsize/{fileName}')
 
-            totalFiles+=1
-
-
+                totalFiles+=1
         except:
-            print(f'ERRO: {fileName} não é um arquivo de imagem válido!\n')
+            with open('log.txt','w') as logFile:
+                logging.error(f'"{fileName}" não é um arquivo de imagem válido!\n')
 
 print(f'{totalFiles} arquivos redimensionados com sucesso!')
