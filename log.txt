@@ -1,3 +1,0 @@
-ERROR:root:"01 texto.txt" não é um arquivo de imagem válido!
-
-INFO:root:None
