@@ -2,7 +2,6 @@
 # Bulk Resize Images
 
 ## Overview
---------------
 
 Resizes all images in the *'./imgs'* folder, by getting the new size input from user.
 
@@ -15,7 +14,6 @@ I created this as a way to study python and also because I sometimes need to bul
 Any suggestions and improvements will be most welcome! :wink:
 
 ## How to use it
------------
 
 - Copy all the image files you want to resize to *'./imgs'* and run *resizeImgs.py* .
 
