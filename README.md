@@ -1,6 +1,5 @@
 
 # Bulk Resize Images
------------
 
 ## Overview
 --------------
