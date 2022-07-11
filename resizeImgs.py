@@ -49,7 +49,7 @@ for fileName in os.listdir(imgDir):
     filePath = f'{imgDir}/{fileName}'
 
     # CONFERE SE É REALMENTE UM ARQUIVO, E NÃO UMA PASTA
-    if os.path.isfile(filePath):
+    if os.path.isfile(filePath) and not fileName == '.gitignore':
         try:
             with Image.open(filePath) as image: # CONTEXT MANAGER PARA GARANTIR QUE ARQUIVO SERÁ FECHADO QUANDO NÃO FOR MAIS NECESSÁRIO
                 image = ImageOps.exif_transpose(image) # MANTÉM A ORIENTAÇÃO DA IMAGEM ORIGINAL
