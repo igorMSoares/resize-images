@@ -13,6 +13,14 @@ I created this as a way to study python and also because I sometimes need to bul
 
 Any suggestions and improvements will be most welcome! :wink:
 
+## Dependencies
+
+- Pillow (PIL Fork)
+```
+pip install --upgrade pip
+pip install --upgrade Pillow
+```
+
 ## How to use it
 
 - Copy all the image files you want to resize to *'./imgs'* and run *resizeImgs.py* .
