@@ -28,23 +28,6 @@ while not re.match('^\d+\s{0,1}(px){0,1}$', maxSize): # 1 ou mais dígitos, segu
 else:
     maxSize = int(maxSize.strip('px'))
 
-# while True: # TESTANDO SE VALOR DIGITADO É UM NÚMERO, USANDO try except
-#     try:
-#         maxSize = input('Qual tamanho do maior Lado?\nDigite um valor númerico apenas, sem usar a unidade "px": ')
-#         maxSize = int(maxSize.strip('px'))
-#         break
-#     except ValueError:
-#         print(f'\n[ERRO] "{maxSize}" não é numero. Tente novamente\n')
-
-### TESTANDO SE VALOR DIGITADO É UM NÚMERO, SEM USAR try except
-# maxSize = input('Qual tamanho do maior Lado?\nDigite um valor númerico apenas, sem usar a unidade "px": ')
-#
-# while not maxSize.isnumeric():
-#     print(f'\nErro! "{maxSize}" não é numero. Tente novamente\n')
-#     maxSize = input('Qual tamanho do maior Lado?\nDigite um valor númerico apenas, sem usar a unidade "px": ')
-# else:
-#     maxSize = int(maxSize)
-
 for fileName in os.listdir(imgDir):
     filePath = f'{imgDir}/{fileName}'
 
