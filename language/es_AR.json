@@ -1,0 +1,25 @@
+{
+  "date_format": "%d/%b/%Y %H:%M:%S",
+
+  "enter_data": "Cual tamaño, en pixeles, será la dimension más larga? (Las proporciones no cambiarán)\n",
+
+  "invalid_data_error": "\n[ERROR] \"<--input value-->\" no es un numero valido, intenta otra vez.",
+
+  "enter_data_again": "Cual tamaño, en pixeles, será la dimension más larga? (P.ej.: 1200px)\n",
+
+  "file_not_resized": "Las dimensiones de \"{file_name}\" no cambiaron.\n\"{new_largest_dimension}px\" es mas largo que las dimensiones originales: ({img_width}px,{img_height}px)",
+
+  "non_image_error": "{error} (no es un archivo de imagen)\n",
+
+  "final_message": {
+                    "singular": "\n{total_files_resized} archivo redimensionado",
+                    "plural": "\n{total_files_resized} archivos redimensionados"
+                  },
+
+  "saved_to": {
+                "singular": " y guardado en \"{resized_images_dir}\"",
+                "plural": " y guardados en \"{resized_images_dir}\""
+              },
+
+  "check_the_log": "Acceder al archivo \"{log_file}\" para más detalles"
+}

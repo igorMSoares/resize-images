@@ -7,7 +7,9 @@ Resizes all images in the *'./imgs'* folder, by getting the new size input from 
 
 It **maintains the aspect ratio** and **orientation** of the original images, but it only resizes to **smaller** sizes, as it's intended to reduce large photo files and also to avoid quality loss by enlarging images.
 
-For now, all the prompt messages are in PT-BR, but I intend to implement internacionalization.
+The language of all the output messages is set in the *language* variable (TO DO: pass the locale as an argument when running the resize_images.py).
+
+For now I have **'pt_BR'**, **'es_AR'** and **'en_US'** already working. New languages can be added by creating a *ll_LL.json* file under the *./language* directory. More information about that in the [./language/README.md](./language/README.md)
 
 I created this as a way to study python and also because I sometimes need to bulk resize large photos taken by camera.
 

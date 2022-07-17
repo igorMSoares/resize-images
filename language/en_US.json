@@ -1,0 +1,25 @@
+{
+  "date_format": "%b-%d-%Y %I:%M:%S %p",
+
+  "enter_data": "What size, in pixels, should the image's largest dimension have? (Aspect Ratio will be preserved)\n",
+
+  "invalid_data_error": "\n[ERROR] \"<--input value-->\" is not a valid number. Try again.",
+
+  "enter_data_again": "What size, in pixels, should the image's largest dimension have? (E.g.: 1200px)\n",
+
+  "file_not_resized": "\"{file_name}\" was not resized.\n\"{new_largest_dimension}px\" is larger than the original image's size: ({img_width}px,{img_height}px)",
+
+  "non_image_error": "{error} (it's not a valid image file)\n",
+
+  "final_message": {
+                    "singular": "\n{total_files_resized} file resized",
+                    "plural": "\n{total_files_resized} files resized"
+                  },
+
+  "saved_to": {
+                "singular": " and saved to \"{resized_images_dir}\"",
+                "plural": " and saved to \"{resized_images_dir}\""
+              },
+
+  "check_the_log": "Check the \"{log_file}\" for more information"
+}

@@ -4,19 +4,9 @@ import os
 from os import listdir
 
 import re # Regular Expressions Library
-
+import json
 import logging
 
-log_file = 'log.txt'
-logging.basicConfig(
-            filename = log_file,
-            filemode = 'w',
-            level = logging.INFO,
-            format = '%(asctime)s\n%(levelname)s: %(message)s\n',
-            datefmt = '%d/%b/%Y %H:%M:%S')
-
-# Indicates that something has been written to log_file
-log_has_something = False
 
 def something_in_log():
     '''Sets True only the first time that something is written to log_file'''
@@ -24,16 +14,6 @@ def something_in_log():
     global log_has_something
     if not log_has_something:
         log_has_something = True
-
-
-def singular_or_plural():
-    '''Outputs final message in singular form if total_files_resized == 1'''
-
-    global total_files_resized
-    if total_files_resized == 1:
-        return ""
-    else:
-        return "s"
 
 
 def set_largest_dimension(input_message, error_message, try_again_message=False):
@@ -67,19 +47,33 @@ def set_largest_dimension(input_message, error_message, try_again_message=False)
 
 
 # Initializing variables
+language = 'pt_BR'
+encoding = 'utf-8'
+with open("language/"+language+".json", "r", encoding=encoding) as json_file:
+    messages = json.load(json_file)
+
+log_file = './log.txt'
+logging.basicConfig(
+            filename = log_file,
+            filemode = 'w',
+            encoding = encoding,
+            level = logging.INFO,
+            format = '%(asctime)s\n%(levelname)s: %(message)s\n',
+            datefmt = messages["date_format"]) # datefmt in language file
+
+# Indicates that something has been written to log_file
+log_has_something = False
+
 images_dir = './imgs'
 resized_images_dir = f'{images_dir}/resized'
 total_files_resized = 0
 
 # Messages that will be displayed to the user
-input_message = 'Qual tamanho, em pixels, deverá ter o maior lado da imagem? ' \
-                    '(A proporção será mantida)\n'
+input_message = messages["enter_data"]
 
-error_message = f'\n[ERRO] "<--input value-->" não é um número válido. ' \
-                    'Tente novamente.\n'  # <--input value--> is a placeholder
+error_message = messages["invalid_data_error"]
 
-try_again_message = 'Qual tamanho, em pixels, deverá ter o maior lado ' \
-                        'da imagem? (Ex.: 1200px)\n'
+try_again_message = messages["enter_data_again"]
 
 new_largest_dimension = set_largest_dimension(
                             input_message,
@@ -96,10 +90,13 @@ for file_name in os.listdir(images_dir):
                 image = ImageOps.exif_transpose(image) # Maintains orientation
 
                 if new_largest_dimension > max(image.size):
-                    logging.info(f'"{file_name}" não foi redimensionado.\n' \
-                                    f'"{new_largest_dimension}px" é maior do ' \
-                                    'que o tamanho original da imagem: ' \
-                                    f'({image.width}px,{image.height}px)')
+                    logging.info(messages["file_not_resized"].format(
+                                    file_name=file_name,
+                                    new_largest_dimension=new_largest_dimension,
+                                    img_width=image.width,
+                                    img_height=image.height
+                                    )
+                                )
                     something_in_log()
                 else:
                     # Resizes image's largest dimension
@@ -113,16 +110,22 @@ for file_name in os.listdir(images_dir):
 
         except Image.UnidentifiedImageError as error:
             # When Image.open() receives a non image file as argument
-            logging.warning(f'{error} (não é um arquivo de imagem válido)\n')
+            logging.warning(messages["non_image_error"].format(error=error))
             something_in_log()
 
-final_message = f'\n{total_files_resized} arquivo{singular_or_plural()} ' \
-                    f'redimensionado{singular_or_plural()}'
+if total_files_resized == 1:
+    final_message = messages["final_message"]["singular"]
+    final_message += messages["saved_to"]["singular"]
+else:
+    final_message = messages["final_message"]["plural"]
+    if total_files_resized > 0:
+            final_message += messages["saved_to"]["singular"]
 
-if total_files_resized > 0:
-    final_message+=f' e salvo{singular_or_plural()} ' \
-                        f'na pasta "{resized_images_dir}"'
 
-print(final_message)
+print(final_message.format(
+            total_files_resized=total_files_resized,
+            resized_images_dir=resized_images_dir
+        ))
+
 if log_has_something:
-    print(f'Acesse o arquivo "./{log_file}" para mais informações')
+    print(messages["check_the_log"].format(log_file=log_file))
