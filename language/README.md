@@ -71,7 +71,7 @@ encoding = 'utf-8'
 "date_format": "%d/%b/%Y %H:%M:%S"
 ```
 
-- **"enter_data"**: First messaged displayed to the user. Asks to enter a size in pixels for the new largest dimension.
+- **"enter_data"**: First message displayed to the user. Asks to enter a size in pixels for the new largest dimension.
 
 - **"invalid_data_error"**: In case user enters an invalid input, this message will be displayed.
 
@@ -97,7 +97,7 @@ encoding = 'utf-8'
 
 - **"saved_to"**: This is a complementary final message, informing, for example, where the resized images where saved to. Accepts the variable:
 
-  - *{resized_images_dir}*: path to the resized images directory.
+  - *{resized_images_dir}*: Path to the resized images directory.
 
 
 - **"check_the_log"**: If something was written to the log file, this message will be displayed informing to check the log file for more details. Accepts the variable:
