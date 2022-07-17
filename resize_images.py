@@ -119,7 +119,7 @@ if total_files_resized == 1:
 else:
     final_message = messages["final_message"]["plural"]
     if total_files_resized > 0:
-            final_message += messages["saved_to"]["singular"]
+            final_message += messages["saved_to"]["plural"]
 
 
 print(final_message.format(
