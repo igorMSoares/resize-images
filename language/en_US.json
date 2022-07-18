@@ -3,7 +3,7 @@
 
   "enter_data": "What size, in pixels, should the image's largest dimension have? (Aspect Ratio will be preserved)\n",
 
-  "invalid_data_error": "\n[ERROR] \"<--input value-->\" is not a valid number. Try again.",
+  "invalid_data_error": "\n[ERROR] \"{input_value}\" is not a valid number. Try again.",
 
   "enter_data_again": "What size, in pixels, should the image's largest dimension have? (E.g.: 1200px)\n",
 

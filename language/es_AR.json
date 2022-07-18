@@ -1,9 +1,9 @@
 {
   "date_format": "%d/%b/%Y %H:%M:%S",
 
-  "enter_data": "Cual tamaño, en pixeles, será la dimension más larga? (Las proporciones no cambiarán)\n",
+  "enter_data": "Cual tamaño, en pixeles, para la dimension más larga? (Las proporciones no cambiarán)\n",
 
-  "invalid_data_error": "\n[ERROR] \"<--input value-->\" no es un numero valido, intenta otra vez.",
+  "invalid_data_error": "\n[ERROR] \"{input_value}\" no es un numero valido, intenta otra vez.",
 
   "enter_data_again": "Cual tamaño, en pixeles, será la dimension más larga? (P.ej.: 1200px)\n",
 

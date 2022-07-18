@@ -3,7 +3,7 @@
 
   "enter_data": "Qual tamanho, em pixels, deverá ter o maior lado da imagem? (A proporção será mantida)\n",
 
-  "invalid_data_error": "\n[ERRO] \"<--input value-->\" não é um número válido. Tente novamente.",
+  "invalid_data_error": "\n[ERRO] \"{input_value}\" não é um número válido. Tente novamente.",
 
   "enter_data_again": "Qual tamanho, em pixels, deverá ter o maior lado da imagem? (Ex.: 1200px)\n",
 

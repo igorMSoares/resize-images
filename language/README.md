@@ -1,6 +1,6 @@
 # Translations
 
-All messages displayed to the user will be read from a JSON file named after the locale set in the *'language'* variable
+All messages displayed to the user will be read from a JSON file named after the locale set in the *'language'* variable.
 
 ```
 language = 'pt_BR'
@@ -8,7 +8,7 @@ encoding = 'utf-8'
 ```
 ## How to add a new language
 
-- Create a *ll_LL.json* file in the **./language/** directory (*en_GB.json* for British English, for example)
+- Create a *ll_LL.json* file in the **./language/** directory (*en_GB.json* for British English, for example).
 
 ```
 .
@@ -55,7 +55,6 @@ encoding = 'utf-8'
 - **No key should be removed from the structure**, if you don't want to use it, just assign an empty string (**""**) to it
 
 - If there's no difference between singular and plural forms, enter the same message for both keys:
-
 ```
 "final_message": {
                   "singular": "This is the final message",
@@ -66,14 +65,16 @@ encoding = 'utf-8'
 ## Keys description
 
 - **"date_format"**: Use format code to specify the date format for the log entries. ([Format Codes Reference](https://www.w3schools.com/python/gloss_python_date_format_codes.asp))
-
 ```
 "date_format": "%d/%b/%Y %H:%M:%S"
 ```
 
 - **"enter_data"**: First message displayed to the user. Asks to enter a size in pixels for the new largest dimension.
 
-- **"invalid_data_error"**: In case user enters an invalid input, this message will be displayed.
+- **"invalid_data_error"**: In case user enters an invalid input, this message will be displayed. Accepts the variable:
+
+  - *{input_value}*: The invalid input entered by the user.
+
 
 - **"enter_data_again"**: This message will be displayed after the "invalid_data_error" message, asking again for a new largest dimension size. Can be used to provide examples of valid inputs.
 
