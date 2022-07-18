@@ -1,10 +1,9 @@
 # Translations
 
-All messages displayed to the user will be read from a JSON file named after the locale set in the *'language'* variable.
+All messages displayed to the user will be read from a JSON file named after the locale set in the *--language* flag:
 
 ```
-language = 'pt_BR'
-encoding = 'utf-8'
+py resize_images.py --language pt_BR --encoding utf-8
 ```
 ## How to add a new language
 
@@ -21,7 +20,7 @@ encoding = 'utf-8'
 
 - The JSON file should have the following structure:
 
-```
+```json
 {
   "date_format": "",
 
@@ -55,7 +54,7 @@ encoding = 'utf-8'
 - **No key should be removed from the structure**, if you don't want to use it, just assign an empty string (**""**) to it
 
 - If there's no difference between singular and plural forms, enter the same message for both keys:
-```
+```json
 "final_message": {
                   "singular": "This is the final message",
                   "plural": "This is the final message"
@@ -65,7 +64,7 @@ encoding = 'utf-8'
 ## Keys description
 
 - **"date_format"**: Use format code to specify the date format for the log entries. ([Format Codes Reference](https://www.w3schools.com/python/gloss_python_date_format_codes.asp))
-```
+```json
 "date_format": "%d/%b/%Y %H:%M:%S"
 ```
 
