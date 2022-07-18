@@ -142,7 +142,7 @@ def validate_args(args):
     languages = get_languages(languages_dir)
     if args.language not in languages: # Validates language
         print(f'"{args.language}" is not available in {languages_dir}.\n' \
-                'Language will be set to "en_US".')
+                'Language will be set to "en_US".\n')
         args.language = 'en_US'
 
     if not os.path.isdir(args.images_dir): # Validates images_dir
@@ -165,7 +165,7 @@ def validate_args(args):
 
     if not Path(os.path.dirname(args.log_file)).exists(): # Validates log_file
         print(f'"{args.log_file}" is not a valid path. ' \
-                'Using "./log.txt" for log file instead.')
+                'Using "./log.txt" for log file instead.\n')
         args.log_file = 'log.txt'
 
 
