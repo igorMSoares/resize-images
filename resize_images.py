@@ -2,26 +2,23 @@ from PIL import Image, ImageOps
 
 import os
 from os import listdir
+from pathlib import Path
 
 import re # Regular Expressions Library
 import json
 import logging
-
-
-def something_in_log():
-    '''Sets True only the first time that something is written to log_file'''
-
-    global log_has_something
-    if not log_has_something:
-        log_has_something = True
+import argparse
+import codecs
 
 
 def set_largest_dimension(input_message, error_message, try_again_message=False):
-    '''If the input value is valid, returns the input value converted to a integer
+    '''Asks user to enter the size of the resized image's largest dimension.
+
+    If the input value is valid, returns the input value converted to a integer
     If not, shows error_message and
     asks for a different value, using try_again_message
 
-    You may use '<--input value-->' placeholder inside your error_message,
+    You may use '{input_value}' inside your error_message,
     and it will be replaced by the actual input_value entered by the user
     '''
 
@@ -34,7 +31,7 @@ def set_largest_dimension(input_message, error_message, try_again_message=False)
         # and ending with one or none 'px' unit <(px){0,1}$>
         #
         # Examples of valid inputs: '1200', '1200px'ou '1200 px'
-        print(error_message.replace('<--input value-->', input_value))
+        print(error_message.format(input_value=input_value))
 
         if not try_again_message:
             # If a try_again_message is not passed to the function,
@@ -94,13 +91,102 @@ def resize_images(images_dir, new_largest_dimension):
     return total_files_resized
 
 
+def get_languages(languages_dir):
+    '''Iterates languages_dir and returns an array with all the
+    languages available (E.g.: ['pt_BR', 'en_US', 'es_AR'])'''
+
+    json_files = list(Path(languages_dir).glob('*.json'))
+
+    # Removes '.json' from file names
+    json_files = list(map(lambda p: p.stem, json_files))
+
+    # Remove all (if any) json files that are not in 'll_LL' format
+    regex = re.compile('^[a-z]{2}_[A-Z]{2}')
+    return [lang for lang in json_files if regex.match(lang)]
+
+
+def get_args():
+    '''Gets all the arguments passed in the command line'''
+
+    parser = argparse.ArgumentParser(
+                formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+                description='''
+                    Resizes all images in a given directory (./imgs/ by default)
+                    with a new largest dimension size, preserving the aspect ratio
+                    and orientation of the images.
+                    Can't be used to enlarge images.''')
+
+    parser.add_argument('-d', '--images_dir',
+                            help='Directory with images to resize',
+                            default='./imgs')
+    parser.add_argument('-r', '--resized_dir',
+                            help='Resized images directory',
+                            default='./imgs/resized')
+    parser.add_argument('-l', '--language',
+                            help='Language of the output messages in ll_LL format',
+                            default='pt_BR')
+    parser.add_argument('-e', '--encoding',
+                            help='Output messages encoding',
+                            default='utf-8')
+    parser.add_argument('-f', '--log_file',
+                            help='Name of the log file (specify full path if needed)',
+                            default='log.txt')
+
+    return parser.parse_args()
+
+
+def validate_args(args):
+    '''Validates all the arguments passed in the command line'''
+
+    languages_dir = './language'
+    languages = get_languages(languages_dir)
+    if args.language not in languages: # Validates language
+        print(f'"{args.language}" is not available in {languages_dir}.\n' \
+                'Language will be set to "en_US".')
+        args.language = 'en_US'
+
+    if not os.path.isdir(args.images_dir): # Validates images_dir
+        print(f'"{args.images_dir}" is not a valid directory.\n' \
+                f'Run {os.path.basename(__file__)} again and use --image_dir ' \
+                'to specify a valid directory.')
+        exit()
+
+    if not os.path.isdir(args.resized_dir): # Validates resize_dir
+        print(f'"{args.resized_dir}" is not a valid directory.\n' \
+                f'Run {os.path.basename(__file__)} again and use --resized_dir ' \
+                'to specify a valid directory.')
+        exit()
+
+    try: # Validates encoding
+        codecs.lookup(args.encoding)
+    except LookupError as error:
+        print(f'{error}. Using utf-8 instead.\n')
+        args.encoding = 'utf-8'
+
+    if not Path(os.path.dirname(args.log_file)).exists(): # Validates log_file
+        print(f'"{args.log_file}" is not a valid path. ' \
+                'Using "./log.txt" for log file instead.')
+        args.log_file = 'log.txt'
+
+
+def something_in_log():
+    '''Sets True only the first time that something is written to log_file'''
+
+    global log_has_something
+    if not log_has_something:
+        log_has_something = True
+
+
 # Initializing variables
-language = 'pt_BR'
-encoding = 'utf-8'
+args = get_args()
+validate_args(args)
+
+language = args.language
+encoding = args.encoding
 with open("language/"+language+".json", "r", encoding=encoding) as json_file:
     messages = json.load(json_file)
 
-log_file = './log.txt'
+log_file = args.log_file
 logging.basicConfig(
             filename = log_file,
             filemode = 'w',
@@ -112,8 +198,8 @@ logging.basicConfig(
 # Indicates that something has been written to log_file
 log_has_something = False
 
-images_dir = './imgs'
-resized_images_dir = f'{images_dir}/resized'
+images_dir = args.images_dir
+resized_images_dir = args.resized_dir
 
 new_largest_dimension = set_largest_dimension(
                             messages["enter_data"],

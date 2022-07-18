@@ -3,11 +3,15 @@
 
 ## Overview
 
-Resizes all images in the *'./imgs'* folder, by getting the new size input from user.
+Resizes all images in a directory, by getting the new size input from the user. All resized images will be saved to *./imgs/resized/* by default.
 
 It **maintains the aspect ratio** and **orientation** of the original images, but it only resizes to **smaller** sizes, as it's intended to reduce large photo files and also to avoid quality loss by enlarging images.
 
-The language of all the output messages is set in the *language* variable (TO DO: pass the locale as an argument when running the resize_images.py).
+The language of all the output messages can be set using the *--language* flag in the command line. (Default language is *pt_BR*)
+
+```
+py resize_images.py --language en_US
+```
 
 For now, **'pt_BR'**, **'es_AR'** and **'en_US'** are already available. New languages can be added by creating a *ll_LL.json* file under the *./language* directory. More information about that in the [./language/README.md](./language/README.md)
 
@@ -25,7 +29,15 @@ pip install --upgrade Pillow
 
 ## How to use it
 
-- Copy all the image files you want to resize to *'./imgs'* and run *resizeImgs.py* .
+- Copy all the image files you want to resize to *./imgs/* and run *resize_images.py* .
+```
+py resize_images.py
+```
+
+- To choose another image directory, use the *--images_dir* flag:
+```
+py resize_images.py --images_dir
+```
 
 - User will then be prompted to enter the new intended size, in pixels.
   - Examples of valid input values:
@@ -41,12 +53,15 @@ pip install --upgrade Pillow
 
 - Note that the user will only enter the size of the **largest dimension**, no matter whether it is *width* or *height*, as the **aspect ratio is to be preserved**.
 
-- All the images in the *'./imgs'* folder will be resized to the same largest dimension size.
+- **All the images** in the chosen directory will be resized to the same largest dimension size.
 
-- The resized images will be saved to *'./imgs/resized'* .
+- The resized images will be saved to *'./imgs/resized'* by default. To choose another destination, use the *--resized_dir* flag:
+```
+py resize_images.py --resized-dir
+```
 
 
-- The file *'./log.txt'* will be used (when necessary) to output extra informations, like:
-  - Warning whether any non image file is present in the *'./imgs'* folder.
+- The file *./log.txt* will be used (when necessary) to output extra informations, like:
+  - Warning whether any non image file is present in the images directory.
 
   - Informing that a given image file was not resized due to the new size being larger than the original image dimensions.
