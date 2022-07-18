@@ -45,6 +45,53 @@ def set_largest_dimension(input_message, error_message, try_again_message=False)
     else:
         return int(input_value.strip('px'))
 
+def resize_images(images_dir, new_largest_dimension):
+    '''Iterates the images_dir applying new_largest_dimension to each image.
+    Returns the number of resized files.
+
+    If original image's size is smaller than new_largest_dimension, the
+    image won't be resized and a info will be written to the log file.
+
+    If a non image file is present in the images_dir, the file will be ignored
+    and a warning will be written to the log file.
+    '''
+    total_files_resized = 0
+
+    for file_name in os.listdir(images_dir):
+        file_path = f'{images_dir}/{file_name}'
+
+        # Checks if it's not a directory and ignores .gitignore file
+        if os.path.isfile(file_path) and not file_name=='.gitignore':
+            try:
+                with Image.open(file_path) as image: # Context Manager
+                    image = ImageOps.exif_transpose(image) # Maintains orientation
+
+                    if new_largest_dimension > max(image.size):
+                        logging.info(messages["file_not_resized"].format(
+                                        file_name=file_name,
+                                        new_largest_dimension=new_largest_dimension,
+                                        img_width=image.width,
+                                        img_height=image.height
+                                        )
+                                    )
+                        something_in_log()
+                    else:
+                        # Resizes image's largest dimension
+                        # with new_largest_dimension and maintains the aspect ratio
+                        image.thumbnail((
+                                new_largest_dimension,
+                                new_largest_dimension))
+
+                        image.save(f'{resized_images_dir}/{file_name}')
+                        total_files_resized += 1
+
+            except Image.UnidentifiedImageError as error:
+                # When Image.open() receives a non image file as argument
+                logging.warning(messages["non_image_error"].format(error=error))
+                something_in_log()
+
+    return total_files_resized
+
 
 # Initializing variables
 language = 'pt_BR'
@@ -66,59 +113,20 @@ log_has_something = False
 
 images_dir = './imgs'
 resized_images_dir = f'{images_dir}/resized'
-total_files_resized = 0
-
-# Messages that will be displayed to the user
-input_message = messages["enter_data"]
-
-error_message = messages["invalid_data_error"]
-
-try_again_message = messages["enter_data_again"]
 
 new_largest_dimension = set_largest_dimension(
-                            input_message,
-                            error_message,
-                            try_again_message)
+                            messages["enter_data"],
+                            messages["invalid_data_error"],
+                            messages["enter_data_again"])
 
-for file_name in os.listdir(images_dir):
-    file_path = f'{images_dir}/{file_name}'
-
-    # Checks if it's not a directory and ignores .gitignore file
-    if os.path.isfile(file_path) and not file_name=='.gitignore':
-        try:
-            with Image.open(file_path) as image: # Context Manager
-                image = ImageOps.exif_transpose(image) # Maintains orientation
-
-                if new_largest_dimension > max(image.size):
-                    logging.info(messages["file_not_resized"].format(
-                                    file_name=file_name,
-                                    new_largest_dimension=new_largest_dimension,
-                                    img_width=image.width,
-                                    img_height=image.height
-                                    )
-                                )
-                    something_in_log()
-                else:
-                    # Resizes image's largest dimension
-                    # with new_largest_dimension and maintains the aspect ratio
-                    image.thumbnail((
-                            new_largest_dimension,
-                            new_largest_dimension))
-
-                    image.save(f'{resized_images_dir}/{file_name}')
-                    total_files_resized += 1
-
-        except Image.UnidentifiedImageError as error:
-            # When Image.open() receives a non image file as argument
-            logging.warning(messages["non_image_error"].format(error=error))
-            something_in_log()
+total_files_resized = resize_images(images_dir, new_largest_dimension)
 
 if total_files_resized == 1:
     final_message = messages["final_message"]["singular"]
     final_message += messages["saved_to"]["singular"]
 else:
     final_message = messages["final_message"]["plural"]
-    if total_files_resized > 0:
+    if total_files_resized > 1:
             final_message += messages["saved_to"]["plural"]
 
 
