@@ -45,6 +45,7 @@ def set_largest_dimension(input_message, error_message, try_again_message=False)
     else:
         return int(input_value.strip('px'))
 
+
 def resize_images(images_dir, new_largest_dimension):
     '''Iterates the images_dir applying new_largest_dimension to each image.
     Returns the number of resized files.

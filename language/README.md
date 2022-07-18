@@ -90,12 +90,12 @@ encoding = 'utf-8'
   - *{error}*: The *Image.UnidentifiedImageError* raised when Image.open() receives a non image file as an argument.
 
 
-- **"final_message"**: Message displayed at the end of execution. Can be used to inform how many files where actually resized. Accepts the variable:
+- **"final_message"**: Message displayed at the end of execution. Can be used to inform how many files were actually resized. Accepts the variable:
 
   - *{total_files_resized}*: Number of resized files.
 
 
-- **"saved_to"**: This is a complementary final message, informing, for example, where the resized images where saved to. Accepts the variable:
+- **"saved_to"**: This is a complementary final message, informing, for example, where the resized images were saved to. Accepts the variable:
 
   - *{resized_images_dir}*: Path to the resized images directory.
 
