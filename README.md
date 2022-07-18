@@ -23,8 +23,7 @@ Any suggestions and improvements will be most welcome! :wink:
 
 - Pillow (PIL Fork)
 ```
-pip install --upgrade pip
-pip install --upgrade Pillow
+pip install Pillow
 ```
 
 ## How to use it
@@ -36,7 +35,7 @@ py resize_images.py
 
 - To choose another image directory, use the *--images_dir* flag:
 ```
-py resize_images.py --images_dir
+py resize_images.py --images_dir "path/to/images"
 ```
 
 - User will then be prompted to enter the new intended size, in pixels.
@@ -57,7 +56,7 @@ py resize_images.py --images_dir
 
 - The resized images will be saved to *'./imgs/resized'* by default. To choose another destination, use the *--resized_dir* flag:
 ```
-py resize_images.py --resized-dir
+py resize_images.py --resized-dir "path/to/resized"
 ```
 
 
