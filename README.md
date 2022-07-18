@@ -9,7 +9,7 @@ It **maintains the aspect ratio** and **orientation** of the original images, bu
 
 The language of all the output messages can be set using the *--language* flag in the command line. (Default language is *pt_BR*)
 
-```
+```bash
 py resize_images.py --language en_US
 ```
 
@@ -22,31 +22,31 @@ Any suggestions and improvements will be most welcome! :wink:
 ## Dependencies
 
 - Pillow (PIL Fork)
-```
+```bash
 pip install Pillow
 ```
 
 ## How to use it
 
 - Copy all the image files you want to resize to *./imgs/* and run *resize_images.py* .
-```
+```bash
 py resize_images.py
 ```
 
 - To choose another image directory, use the *--images_dir* flag:
-```
+```bash
 py resize_images.py --images_dir "path/to/images"
 ```
 
 - User will then be prompted to enter the new intended size, in pixels.
   - Examples of valid input values:
-    ```
+    ```bash
     > 1200px
     ```
-    ```
+    ```bash
     > 1200 px
     ```
-    ```
+    ```bash
     > 1200
     ```
 
@@ -55,7 +55,7 @@ py resize_images.py --images_dir "path/to/images"
 - **All the images** in the chosen directory will be resized to the same largest dimension size.
 
 - The resized images will be saved to *'./imgs/resized'* by default. To choose another destination, use the *--resized_dir* flag:
-```
+```bash
 py resize_images.py --resized-dir "path/to/resized"
 ```
 

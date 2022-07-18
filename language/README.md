@@ -2,14 +2,14 @@
 
 All messages displayed to the user will be read from a JSON file named after the locale set in the *--language* flag:
 
-```
+```bash
 py resize_images.py --language pt_BR --encoding utf-8
 ```
 ## How to add a new language
 
 - Create a *ll_LL.json* file in the **./language/** directory (*en_GB.json* for British English, for example).
 
-```
+```bash
 .
 +-- language/
 |   +-- pt_BR.json
