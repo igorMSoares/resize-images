@@ -56,7 +56,7 @@ py resize_images.py --images_dir "path/to/images"
 
 - The resized images will be saved to *'./imgs/resized'* by default. To choose another destination, use the *--resized_dir* flag:
 ```bash
-py resize_images.py --resized-dir "path/to/resized"
+py resize_images.py --resized_dir "path/to/resized"
 ```
 
 
