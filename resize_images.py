@@ -115,62 +115,61 @@ def get_args():
                     and orientation of the images.
                     Can't be used to enlarge images.''')
 
+    global default_args
     parser.add_argument('-d', '--images_dir',
                             help='Directory with images to resize',
-                            default='./imgs')
+                            default=default_args['images_dir'])
     parser.add_argument('-r', '--resized_dir',
                             help='Resized images directory',
-                            default='./imgs/resized')
+                            default=default_args['resized_dir'])
     parser.add_argument('-l', '--language',
                             help='Language of the output messages in ll_LL format',
-                            default='pt_BR')
+                            default=default_args['language'])
     parser.add_argument('-e', '--encoding',
                             help='Output messages encoding',
-                            default='utf-8')
+                            default=default_args['encoding'])
     parser.add_argument('-f', '--log_file',
                             help='Name of the log file (specify full path if needed)',
-                            default='log.txt')
+                            default=default_args['log_file'])
 
     return parser.parse_args()
 
 
-def validate_args(args):
-    """Validates all the arguments passed in the command line"""
+def validate_argument(arg):
+    """Validates arg passed in the command line"""
 
-    # Validates language
-    languages_dir = './language'
-    languages = get_languages(languages_dir)
-    if args.language not in languages:
-        print(f'"{args.language}" is not available in {languages_dir}.\n' \
-                'Language will be set to "en_US".\n')
-        args.language = 'en_US'
-
-    # Validates images_dir
-    if not os.path.isdir(args.images_dir):
-        print(f'"{args.images_dir}" is not a valid directory.\n' \
-                f'Run {os.path.basename(__file__)} again and use --image_dir ' \
-                'to specify a valid directory.')
-        exit()
-
-    # Validates resize_dir
-    if not os.path.isdir(args.resized_dir):
-        print(f'"{args.resized_dir}" is not a valid directory.\n' \
-                f'Run {os.path.basename(__file__)} again and use --resized_dir ' \
-                'to specify a valid directory.')
-        exit()
-
-    # Validates encoding
-    try:
-        codecs.lookup(args.encoding)
-    except LookupError as error:
-        print(f'{error}. Using utf-8 instead.\n')
-        args.encoding = 'utf-8'
-
-    # Validates log_file
-    if not Path(os.path.dirname(args.log_file)).exists():
-        print(f'"{args.log_file}" is not a valid path. ' \
-                'Using "./log.txt" for log file instead.\n')
-        args.log_file = 'log.txt'
+    global args
+    match arg:
+        case 'language':
+            languages_dir = './language'
+            languages = get_languages(languages_dir)
+            if args.language not in languages:
+                print(f'"{args.language}" is not available in {languages_dir}.\n' \
+                        'Language will be set to "en_US".\n')
+                args.language = 'en_US'
+        case 'images_dir':
+            if not os.path.isdir(args.images_dir):
+                print(f'"{args.images_dir}" is not a valid directory.\n' \
+                        f'Run {os.path.basename(__file__)} again and use --image_dir ' \
+                        'to specify a valid directory.')
+                exit()
+        case 'resized_dir':
+            if not os.path.isdir(args.resized_dir):
+                print(f'"{args.resized_dir}" is not a valid directory.\n' \
+                        f'Run {os.path.basename(__file__)} again and use --resized_dir ' \
+                        'to specify a valid directory.')
+                exit()
+        case 'encoding':
+            try:
+                codecs.lookup(args.encoding)
+            except LookupError as error:
+                print(f'{error}. Using utf-8 instead.\n')
+                args.encoding = 'utf-8'
+        case 'log_file':
+            if not Path(os.path.dirname(args.log_file)).exists():
+                print(f'"{args.log_file}" is not a valid path. ' \
+                        'Using "./log.txt" for log file instead.\n')
+                args.log_file = 'log.txt'
 
 
 def something_in_log():
@@ -182,8 +181,18 @@ def something_in_log():
 
 
 # Initializing variables
-args = get_args()
-validate_args(args)
+default_args = {
+    'language': 'pt_BR',
+    'encoding': 'utf-8',
+    'images_dir': './imgs',
+    'resized_dir': './imgs/resized',
+    'log_file': 'log.txt'
+}
+args = get_args()  # All the arguments returned by the argparse.ArgumentParser
+user_args = [a for a in default_args.keys() if vars(args)[a] != default_args.get(a)]  # Only the args passed by the user
+# Validates args typed by the user:
+for arg in user_args:
+    validate_argument(arg)
 
 language = args.language
 encoding = args.encoding
