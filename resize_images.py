@@ -23,18 +23,11 @@ def set_largest_dimension(input_message, error_message, try_again_message=False)
 
     input_value = input(input_message)
 
-    # Using Regular Expressions to test whether the input value is valid
     while not re.match(r'^\d+\s?(px)?$', input_value):
-        # input_value is not starting with one or more digits <^\d+>
-        # followed by none or one white space <\s{0,1}>
-        # and ending with one or none 'px' unit <(px){0,1}$>
-        #
         # Examples of valid inputs: '1200', '1200px' or '1200 px'
         print(error_message.format(input_value=input_value))
 
         if not try_again_message:
-            # If a try_again_message is not passed to the function,
-            # the input_message will be used again
             try_again_message = input_message
 
         input_value = input(try_again_message)
@@ -57,10 +50,9 @@ def resize_images(images_dir, new_largest_dimension):
     for file_name in os.listdir(images_dir):
         file_path = f'{images_dir}/{file_name}'
 
-        # Checks if it's not a directory and ignores .gitignore file
         if os.path.isfile(file_path) and not file_name == '.gitignore':
             try:
-                with Image.open(file_path) as image:  # Context Manager
+                with Image.open(file_path) as image:
                     image = ImageOps.exif_transpose(image)  # Maintains orientation
 
                     if new_largest_dimension > max(image.size):
@@ -73,8 +65,7 @@ def resize_images(images_dir, new_largest_dimension):
                                      )
                         something_in_log()
                     else:
-                        # Resizes image's largest dimension
-                        # with new_largest_dimension and maintains the aspect ratio
+                        # Resizes image and maintains the aspect ratio
                         image.thumbnail((
                                 new_largest_dimension,
                                 new_largest_dimension))
@@ -83,7 +74,6 @@ def resize_images(images_dir, new_largest_dimension):
                         total_files_resized += 1
 
             except Image.UnidentifiedImageError as error:
-                # When Image.open() receives a non image file as argument
                 logging.warning(messages["non_image_error"].format(error=error))
                 something_in_log()
 
@@ -104,8 +94,8 @@ def get_languages(languages_dir):
     return [lang for lang in json_files if regex.match(lang)]
 
 
-def get_args():
-    """Gets all the arguments passed in the command line"""
+def get_all_args():
+    """Gets all the arguments passed in the command line or assigns a default value"""
 
     parser = argparse.ArgumentParser(
                 formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -115,7 +105,6 @@ def get_args():
                     and orientation of the images.
                     Can't be used to enlarge images.''')
 
-    global default_args
     parser.add_argument('-d', '--images_dir',
                             help='Directory with images to resize',
                             default=default_args['images_dir'])
@@ -135,13 +124,15 @@ def get_args():
     return parser.parse_args()
 
 
-def validate_argument(arg):
-    """Validates arg passed in the command line"""
+def get_args_passed_by_user(default_args):
+    return [a for a in default_args.keys() if vars(args)[a] != default_args.get(a)]
 
-    global args
+
+def validate_argument(arg):
+    """Validates argument passed in the command line"""
+
     match arg:
         case 'language':
-            languages_dir = './language'
             languages = get_languages(languages_dir)
             if args.language not in languages:
                 print(f'"{args.language}" is not available in {languages_dir}.\n' \
@@ -172,6 +163,11 @@ def validate_argument(arg):
                 args.log_file = 'log.txt'
 
 
+def validate_user_args(user_args):
+    for arg in user_args:
+        validate_argument(arg)
+
+
 def something_in_log():
     """Sets True only the first time that something is written to log_file"""
 
@@ -188,15 +184,15 @@ default_args = {
     'resized_dir': './imgs/resized',
     'log_file': 'log.txt'
 }
-args = get_args()  # All the arguments returned by the argparse.ArgumentParser
-user_args = [a for a in default_args.keys() if vars(args)[a] != default_args.get(a)]  # Only the args passed by the user
-# Validates args typed by the user:
-for arg in user_args:
-    validate_argument(arg)
+languages_dir = './language'
+
+args = get_all_args()
+user_args = get_args_passed_by_user(default_args)
+validate_user_args(user_args)
 
 language = args.language
 encoding = args.encoding
-with open("language/"+language+".json", "r", encoding=encoding) as json_file:
+with open(languages_dir+"/"+language+".json", "r", encoding=encoding) as json_file:
     messages = json.load(json_file)
 
 log_file = args.log_file
@@ -208,7 +204,6 @@ logging.basicConfig(
             format='%(asctime)s\n%(levelname)s: %(message)s\n',
             datefmt=messages["date_format"])  # datefmt in language file
 
-# Indicates that something has been written to log_file
 log_has_something = False
 
 images_dir = args.images_dir
