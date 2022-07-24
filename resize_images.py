@@ -1,4 +1,4 @@
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 import os
 from pathlib import Path
@@ -35,7 +35,7 @@ def set_largest_dimension(input_message, error_message, try_again_message=False)
         return int(input_value.strip('px'))
 
 
-def resize_images(images_dir, new_largest_dimension):
+def resize_images(images_directory, new_dimension):
     """Iterates the images_dir applying new_largest_dimension to each image.
     Returns the number of resized files.
 
@@ -47,18 +47,18 @@ def resize_images(images_dir, new_largest_dimension):
     """
     total_files_resized = 0
 
-    for file_name in os.listdir(images_dir):
-        file_path = f'{images_dir}/{file_name}'
+    for file_name in os.listdir(images_directory):
+        file_path = f'{images_directory}/{file_name}'
 
         if os.path.isfile(file_path) and not file_name == '.gitignore':
             try:
                 with Image.open(file_path) as image:
                     image = ImageOps.exif_transpose(image)  # Maintains orientation
 
-                    if new_largest_dimension > max(image.size):
+                    if new_dimension > max(image.size):
                         logging.info(messages["file_not_resized"].format(
                                         file_name=file_name,
-                                        new_largest_dimension=new_largest_dimension,
+                                        new_largest_dimension=new_dimension,
                                         img_width=image.width,
                                         img_height=image.height
                                         )
@@ -67,24 +67,24 @@ def resize_images(images_dir, new_largest_dimension):
                     else:
                         # Resizes image and maintains the aspect ratio
                         image.thumbnail((
-                                new_largest_dimension,
-                                new_largest_dimension))
+                            new_dimension,
+                            new_dimension))
 
                         image.save(f'{resized_images_dir}/{file_name}')
                         total_files_resized += 1
 
-            except Image.UnidentifiedImageError as error:
+            except UnidentifiedImageError as error:
                 logging.warning(messages["non_image_error"].format(error=error))
                 something_in_log()
 
     return total_files_resized
 
 
-def get_languages(languages_dir):
+def get_languages(languages_directory):
     """Iterates languages_dir and returns an array with all the
     languages available (E.g.: ['pt_BR', 'en_US', 'es_AR'])"""
 
-    json_files = list(Path(languages_dir).glob('*.json'))
+    json_files = list(Path(languages_directory).glob('*.json'))
 
     # Removes '.json' from file names
     json_files = list(map(lambda p: p.stem, json_files))
@@ -124,8 +124,8 @@ def get_all_args():
     return parser.parse_args()
 
 
-def get_args_passed_by_user(default_args):
-    return [a for a in default_args.keys() if vars(args)[a] != default_args.get(a)]
+def get_args_passed_by_user(default_arguments):
+    return [key for key in vars(args).keys() if vars(args)[key] != default_arguments[key]]
 
 
 def validate_argument(arg):
@@ -135,20 +135,20 @@ def validate_argument(arg):
         case 'language':
             languages = get_languages(languages_dir)
             if args.language not in languages:
-                print(f'"{args.language}" is not available in {languages_dir}.\n' \
-                        'Language will be set to "en_US".\n')
+                print(f'"{args.language}" is not available in {languages_dir}.\n'
+                      'Language will be set to "en_US".\n')
                 args.language = 'en_US'
         case 'images_dir':
             if not os.path.isdir(args.images_dir):
-                print(f'"{args.images_dir}" is not a valid directory.\n' \
-                        f'Run {os.path.basename(__file__)} again and use --image_dir ' \
-                        'to specify a valid directory.')
+                print(f'"{args.images_dir}" is not a valid directory.\n'
+                      f'Run {os.path.basename(__file__)} again and use --image_dir '
+                      'to specify a valid directory.')
                 exit()
         case 'resized_dir':
             if not os.path.isdir(args.resized_dir):
-                print(f'"{args.resized_dir}" is not a valid directory.\n' \
-                        f'Run {os.path.basename(__file__)} again and use --resized_dir ' \
-                        'to specify a valid directory.')
+                print(f'"{args.resized_dir}" is not a valid directory.\n'
+                      f'Run {os.path.basename(__file__)} again and use --resized_dir '
+                      'to specify a valid directory.')
                 exit()
         case 'encoding':
             try:
@@ -158,13 +158,13 @@ def validate_argument(arg):
                 args.encoding = 'utf-8'
         case 'log_file':
             if not Path(os.path.dirname(args.log_file)).exists():
-                print(f'"{args.log_file}" is not a valid path. ' \
-                        'Using "./log.txt" for log file instead.\n')
+                print(f'"{args.log_file}" is not a valid path. '
+                      'Using "./log.txt" for log file instead.\n')
                 args.log_file = 'log.txt'
 
 
-def validate_user_args(user_args):
-    for arg in user_args:
+def validate_user_args(arguments):
+    for arg in arguments:
         validate_argument(arg)
 
 
@@ -214,19 +214,19 @@ new_largest_dimension = set_largest_dimension(
                             messages["invalid_data_error"],
                             messages["enter_data_again"])
 
-total_files_resized = resize_images(images_dir, new_largest_dimension)
+total_images = resize_images(images_dir, new_largest_dimension)
 
-if total_files_resized == 1:
+if total_images == 1:
     final_message = messages["final_message"]["singular"]
     final_message += messages["saved_to"]["singular"]
 else:
     final_message = messages["final_message"]["plural"]
-    if total_files_resized > 1:
+    if total_images > 1:
         final_message += messages["saved_to"]["plural"]
 
 
 print(final_message.format(
-            total_files_resized=total_files_resized,
+            total_files_resized=total_images,
             resized_images_dir=resized_images_dir
         ))
 

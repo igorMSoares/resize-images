@@ -1,4 +1,4 @@
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 import os
 from pathlib import Path
@@ -16,18 +16,31 @@ class Messages:
     encoding = 'utf-8'
 
     @classmethod
-    def set_language(cls, params):
-        """
-        @type params: dict
-            {language = '',
-            encoding = ''}
-        """
-        Messages.language = params['language']
-        Messages.encoding = params['encoding']
+    def set_language(cls, lang, encoding='utf-8'):
+        if Messages.validate_language(lang) and Messages.validate_encoding(encoding):
+            Messages.language = lang
+            Messages.encoding = encoding
+
+    @classmethod
+    def validate_language(cls, language):
+        if language not in Messages.available_languages():
+            raise ValueError(f'"{language}" is not available in {Messages.languages_dir}')
+        else:
+            return True
+
+    @classmethod
+    def validate_encoding(cls, encoding):
+        try:
+            codecs.lookup(encoding)
+        except LookupError as error:
+            raise error
+        else:
+            return True
 
     @classmethod
     def translated_messages(cls) -> dict:
-        with open(Messages.languages_dir + "/" + Messages.language + ".json", "r", encoding=Messages.encoding) as json_file:
+        language_file = f'{Messages.languages_dir}/{Messages.language}.json'
+        with open(language_file, "r", encoding=Messages.encoding) as json_file:
             return json.load(json_file)
 
     @classmethod
@@ -55,18 +68,29 @@ class Messages:
 
 class ResizerLogger:
     log_has_something = False
+    log_file = ''
 
-    def __init__(self, date_format, log_file='log.txt', encoding='utf-8'):
-        self.log_file = log_file
-        self.encoding = encoding
+    @classmethod
+    def init(cls, log_file='log.txt'):
+        try:
+            ResizerLogger.validate(log_file)
+            ResizerLogger.log_file = log_file
 
-        logging.basicConfig(
-            filename=log_file,
-            filemode='w',
-            encoding=encoding,
-            level=logging.INFO,
-            format='%(asctime)s\n%(levelname)s: %(message)s\n',
-            datefmt=date_format)
+            logging.basicConfig(
+                filename=ResizerLogger.log_file,
+                filemode='w',
+                encoding=Messages.encoding,
+                level=logging.INFO,
+                format='%(asctime)s\n%(levelname)s: %(message)s\n',
+                datefmt=Messages.output("date_format"))
+        except FileNotFoundError as error:
+            print(f'[{error}] Using "log.txt" instead')
+            ResizerLogger.log_file = 'log.txt'
+
+    @classmethod
+    def validate(cls, log_file):
+        if not Path(os.path.dirname(Arguments.args["log_file"])).exists():
+            raise FileNotFoundError(f'"{log_file}" is not a valid path. ')
 
     @classmethod
     def something_in_log(cls):
@@ -75,6 +99,8 @@ class ResizerLogger:
 
     @classmethod
     def write_log(cls, level, message):
+        if not ResizerLogger.log_file:
+            ResizerLogger.init()
         log = getattr(logging, level)
         log(message)
 
@@ -127,7 +153,7 @@ class Arguments:
 
     @classmethod
     def get_args_passed_by_user(cls):
-        return [a for a in Arguments.default_args.keys() if Arguments.args[a] != Arguments.default_args.get(a)]
+        return [key for key in Arguments.args.keys() if Arguments.args[key] != Arguments.default_args[key]]
 
     @classmethod
     def validate_argument(cls, arg):
@@ -135,33 +161,34 @@ class Arguments:
 
         match arg:
             case 'language':
-                languages = Messages.available_languages()
-                if Arguments.args["language"] not in languages:
-                    print(f'"{Arguments.args["language"]}" is not available in {Messages.languages_dir}.\n' \
-                          'Language will be set to "en_US".\n')
+                try:
+                    Messages.validate_language(Arguments.args["language"])
+                except ValueError as error:
+                    print(f'{error}\nLanguage will be set to "en_US".\n')
                     Arguments.args["language"] = 'en_US'
             case 'images_dir':
-                if not os.path.isdir(Arguments.args["images_dir"]):
-                    print(f'"{Arguments.args["images_dir"]}" is not a valid directory.\n' \
-                          f'Run {os.path.basename(__file__)} again and use --image_dir ' \
-                          'to specify a valid directory.')
-                    exit()
+                try:
+                    ResizeImages.validate_directory(Arguments.args["images_dir"])
+                except FileNotFoundError as error:
+                    exit(f'{error}\nRun {os.path.basename(__file__)} again '
+                         'and use --image_dir ' 'to specify a valid directory.')
             case 'resized_dir':
-                if not os.path.isdir(Arguments.args["resized_dir"]):
-                    print(f'"{Arguments.args["resized_dir"]}" is not a valid directory.\n' \
-                          f'Run {os.path.basename(__file__)} again and use --resized_dir ' \
-                          'to specify a valid directory.')
-                    exit()
+                try:
+                    ResizeImages.validate_directory(Arguments.args["resized_dir"])
+                except FileNotFoundError as error:
+                    exit(f'{error}\nRun {os.path.basename(__file__)} again '
+                         'and use --resized_dir to specify a valid directory.')
             case 'encoding':
                 try:
-                    codecs.lookup(Arguments.args["encoding"])
+                    Messages.validate_encoding(Arguments.args["encoding"])
                 except LookupError as error:
                     print(f'{error}. Using utf-8 instead.\n')
                     Arguments.args["encoding"] = 'utf-8'
             case 'log_file':
-                if not Path(os.path.dirname(Arguments.args["log_file"])).exists():
-                    print(f'"{Arguments.args["log_file"]}" is not a valid path. ' \
-                          'Using "./log.txt" for log file instead.\n')
+                try:
+                    ResizerLogger.validate(Arguments.args["log_file"])
+                except FileNotFoundError as error:
+                    print(f'{error}\nUsing "./log.txt" for log file instead.\n')
                     Arguments.args["log_file"] = 'log.txt'
 
     @classmethod
@@ -179,6 +206,11 @@ class ResizeImages:
     total_files_resized = 0
 
     @classmethod
+    def validate_directory(cls, directory):
+        if not os.path.isdir(directory):
+            raise FileNotFoundError(f'"{directory}" is not a valid directory.')
+
+    @classmethod
     def get_largest_dimension(cls, input_message, error_message, try_again_message=""):
         """Asks user to enter the size of the resized image's largest dimension.
 
@@ -188,12 +220,12 @@ class ResizeImages:
 
         You may use '{input_value}' inside your error_message,
         and it will be replaced by the actual input_value entered by the user
+
+        Examples of valid inputs: '1200', '1200px' or '1200 px'
         """
 
         input_value = input(input_message)
-
         while not re.match(r'^\d+\s?(px)?$', input_value):
-            # Examples of valid inputs: '1200', '1200px' or '1200 px'
             print(error_message.format(input_value=input_value))
 
             if not try_again_message:
@@ -229,8 +261,7 @@ class ResizeImages:
                                 new_largest_dimension=new_largest_dimension,
                                 img_width=image.width,
                                 img_height=image.height
-                            )
-                            )
+                            ))
                             ResizerLogger.something_in_log()
                         else:
                             # Resizes image and maintains the aspect ratio
@@ -238,10 +269,10 @@ class ResizeImages:
                                 new_largest_dimension,
                                 new_largest_dimension))
 
-                            image.save(f'{Arguments.args["resized_images_dir"]}/{file_name}')
+                            image.save(f'{Arguments.args["resized_dir"]}/{file_name}')
                             ResizeImages.total_files_resized += 1
 
-                except Image.UnidentifiedImageError as error:
+                except UnidentifiedImageError as error:
                     ResizerLogger.write_log('warning', Messages.output("non_image_error").format(error=error))
                     ResizerLogger.something_in_log()
 
@@ -249,18 +280,15 @@ class ResizeImages:
 Arguments.get_arguments()
 Arguments.validate()
 
-logger = ResizerLogger(Messages.output("date_format"))
+ResizerLogger.init(Arguments.args['log_file'])
 
-Messages.set_language({
-    'language': Arguments.args['language'],
-    'encoding': Arguments.args['encoding']
-})
+Messages.set_language(Arguments.args['language'])
 
-new_largest_dimension = ResizeImages.get_largest_dimension(
-                            Messages.output('enter_data'),
-                            Messages.output('invalid_data_error'),
-                            Messages.output('enter_data_again'))
-ResizeImages.resize_all(Arguments.args["images_dir"], new_largest_dimension)
+new_dimension = ResizeImages.get_largest_dimension(
+                    Messages.output('enter_data'),
+                    Messages.output('invalid_data_error'),
+                    Messages.output('enter_data_again'))
+ResizeImages.resize_all(Arguments.args["images_dir"], new_dimension)
 
 total = ResizeImages.total_files_resized
 if total == 1:
@@ -272,9 +300,9 @@ else:
         final_message += Messages.output("saved_to", "plural")
 
 print(final_message.format(
-            total_files_resized=total,
-            resized_images_dir=Arguments.args["resized_dir"]
-        ))
+    total_files_resized=total,
+    resized_images_dir=Arguments.args["resized_dir"]
+))
 
 if ResizerLogger.log_has_something:
     print(Messages.output("check_the_log").format(log_file=Arguments.args["log_file"]))
