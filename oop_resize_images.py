@@ -19,8 +19,7 @@ class Messages:
     def set_language(cls, params):
         """
         @type params: dict
-            {languages_dir = '',
-            language = '',
+            {language = '',
             encoding = ''}
         """
         Messages.language = params['language']
@@ -97,7 +96,7 @@ class Arguments:
     }
 
     @classmethod
-    def set_arguments(cls):
+    def get_arguments(cls):
         parser = argparse.ArgumentParser(
             formatter_class=argparse.ArgumentDefaultsHelpFormatter,
             description='''
@@ -247,7 +246,7 @@ class ResizeImages:
                     ResizerLogger.something_in_log()
 
 
-Arguments.set_arguments()
+Arguments.get_arguments()
 Arguments.validate()
 
 logger = ResizerLogger(Messages.output("date_format"))
