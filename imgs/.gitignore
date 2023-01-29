@@ -1,6 +1,0 @@
-# Copy the images you want to resize to this directory
-# Ignore everything in this directory
-*
-# Except this file and the resized directory
-!.gitignore
-!resized/
