@@ -157,39 +157,52 @@ class Arguments:
 
     @classmethod
     def validate_argument(cls, arg):
-        """Validates argument passed in the command line"""
+        """Validates arguments passed in the command line"""
 
-        match arg:
-            case 'language':
-                try:
-                    Messages.validate_language(Arguments.args["language"])
-                except ValueError as error:
-                    print(f'{error}\nLanguage will be set to "en_US".\n')
-                    Arguments.args["language"] = 'en_US'
-            case 'images_dir':
-                try:
-                    ResizeImages.validate_directory(Arguments.args["images_dir"])
-                except FileNotFoundError as error:
-                    exit(f'{error}\nRun {os.path.basename(__file__)} again '
-                         'and use --image_dir ' 'to specify a valid directory.')
-            case 'resized_dir':
-                try:
-                    ResizeImages.validate_directory(Arguments.args["resized_dir"])
-                except FileNotFoundError as error:
-                    exit(f'{error}\nRun {os.path.basename(__file__)} again '
-                         'and use --resized_dir to specify a valid directory.')
-            case 'encoding':
-                try:
-                    Messages.validate_encoding(Arguments.args["encoding"])
-                except LookupError as error:
-                    print(f'{error}. Using utf-8 instead.\n')
-                    Arguments.args["encoding"] = 'utf-8'
-            case 'log_file':
-                try:
-                    ResizerLogger.validate(Arguments.args["log_file"])
-                except FileNotFoundError as error:
-                    print(f'{error}\nUsing "./log.txt" for log file instead.\n')
-                    Arguments.args["log_file"] = 'log.txt'
+        def language_validator():
+            try:
+                Messages.validate_language(Arguments.args["language"])
+            except ValueError as error:
+                print(f'{error}\nLanguage will be set to "en_US".\n')
+                Arguments.args["language"] = 'en_US'
+
+        def images_dir_validator():
+            try:
+                ResizeImages.validate_directory(Arguments.args["images_dir"])
+            except FileNotFoundError as error:
+                exit(f'{error}\nRun {os.path.basename(__file__)} again '
+                        'and use --image_dir ' 'to specify a valid directory.')
+
+        def resized_dir_validator():
+            try:
+                ResizeImages.validate_directory(Arguments.args["resized_dir"])
+            except FileNotFoundError as error:
+                exit(f'{error}\nRun {os.path.basename(__file__)} again '
+                        'and use --resized_dir to specify a valid directory.')
+
+        def encoding_validator():
+            try:
+                Messages.validate_encoding(Arguments.args["encoding"])
+            except LookupError as error:
+                print(f'{error}. Using utf-8 instead.\n')
+                Arguments.args["encoding"] = 'utf-8'
+
+        def log_file_validator():
+            try:
+                ResizerLogger.validate(Arguments.args["log_file"])
+            except FileNotFoundError as error:
+                print(f'{error}\nUsing "./log.txt" for log file instead.\n')
+                Arguments.args["log_file"] = 'log.txt'
+
+        validate = {
+            'language': language_validator,
+            'images_dir': images_dir_validator,
+            'resized_dir': resized_dir_validator,
+            'encoding': encoding_validator,
+            'log_file': log_file_validator,
+        }
+
+        validate[arg]();
 
     @classmethod
     def validate_user_args(cls, user_args):
