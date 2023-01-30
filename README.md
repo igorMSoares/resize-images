@@ -4,7 +4,6 @@
 <img alt="MIT License" src="https://img.shields.io/badge/version-1.0.0-blue?style=flat-square" />&nbsp;&nbsp;
 <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-%23373737?style=flat-square" />&nbsp;&nbsp;
 <img alt="MIT License" src="https://img.shields.io/badge/Python 3-FFD43B?style=flat-square&logo=python&logoColor=blue" />&nbsp;&nbsp;
-<img alt="MIT License" src="https://img.shields.io/badge/-%3E%20Command%20Line%20App-yellow?style=flat-square&color=373737" />
 </p>
 
 A command line application to resize all images in a directory, by getting the new size input from the user. All resized images will be saved to _./imgs/resized/_ by default.
@@ -54,7 +53,7 @@ python3 resize_images.py -l es_AR
 - To choose another image directory, use the _--images_dir_ (or _-d_) flag:
 
 ```bash
-py resize_images.py --images_dir "path/to/images"
+python3 resize_images.py --images_dir "path/to/images"
 ```
 
 - User will then be prompted to enter the new intended size, in pixels.
@@ -77,7 +76,7 @@ py resize_images.py --images_dir "path/to/images"
 - The resized images will be saved to _'./imgs/resized'_ by default. To choose another destination, use the _--resized_dir_ (or _-r_) flag:
 
 ```bash
-py resize_images.py --resized_dir "path/to/resized"
+python3 resize_images.py --resized_dir "path/to/resized"
 ```
 
 - The file _./log.txt_ will be used (when necessary) to output extra informations, like:
