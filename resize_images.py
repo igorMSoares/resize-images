@@ -1,6 +1,9 @@
 import sys
 
-from modules import *
+from modules import Arguments
+from modules import Messages
+from modules import ResizerLogger
+from modules import ImageResizer
 
 def main():
     Arguments.get_arguments()
