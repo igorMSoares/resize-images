@@ -1,5 +1,12 @@
 # Bulk Resize Images
 
+<p align="right">
+<img alt="MIT License" src="https://img.shields.io/badge/version-1.0.0-blue?style=flat-square" />&nbsp;&nbsp;
+<img alt="MIT License" src="https://img.shields.io/badge/license-MIT-%23373737?style=flat-square" />&nbsp;&nbsp;
+<img alt="MIT License" src="https://img.shields.io/badge/Python 3-FFD43B?style=flat-square&logo=python&logoColor=blue" />&nbsp;&nbsp;
+<img alt="MIT License" src="https://img.shields.io/badge/-%3E%20Command%20Line%20App-yellow?style=flat-square&color=373737" />
+</p>
+
 A command line application to resize all images in a directory, by getting the new size input from the user. All resized images will be saved to _./imgs/resized/_ by default.
 
 I created this as a way to study python and also because I sometimes need to bulk resize large photos taken by camera.
