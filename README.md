@@ -6,7 +6,7 @@
 <img alt="MIT License" src="https://img.shields.io/badge/Python 3-FFD43B?style=flat-square&logo=python&logoColor=blue" />&nbsp;&nbsp;
 </p>
 
-A command line application to resize all images in a directory, by getting the new size input from the user. All resized images will be saved to _./imgs/resized/_ by default.
+A command-line application to resize all images in a directory, by getting the new size input from the user. All resized images will be saved to `./imgs/resized/` by default.
 
 I created this as a way to study python and also because I sometimes need to bulk resize large photos taken by camera.
 
@@ -16,13 +16,13 @@ Any suggestions and improvements will be most welcome! :wink:
 
 It **maintains the aspect ratio** and **orientation** of the original images, but it only resizes to **smaller** sizes, as it's intended to reduce large photo files and also to avoid quality loss by enlarging images.
 
-The language of all the output messages can be set using the _--language_ (or _-l_) flag in the command line. (Default language is _pt_BR_)
+The language of all the output messages can be set using the `--language` (or `-l`) flag in the command line. (Default language is `pt_BR`)
 
 ```bash
 python3 resize_images.py --language en_US
 ```
 
-For now, **'pt_BR'**, **'es_AR'** and **'en_US'** are already available. New languages can be added by creating a _ll_LL.json_ file under the _./language_ directory. More information about that in the [./language/README.md](./language/README.md)
+For now, **pt_BR**, **es_AR** and **en_US** are already available. New languages can be added by creating a `ll_LL.json` file under the `./language` directory. More information about that in the [./language/README.md](./language/README.md)
 
 ## Dependencies
 
@@ -37,7 +37,7 @@ pip install -r requirements.txt
 
 ## How to use it
 
-- Copy all the image files you want to resize to _./imgs/_ and run _resize_images.py_ :
+- Copy all the image files you want to resize to `./imgs/` and run `resize_images.py` :
 
 ```bash
 # pt_BR is the default language:
@@ -50,7 +50,7 @@ python3 resize_images.py -l en_US
 python3 resize_images.py -l es_AR
 ```
 
-- To choose another image directory, use the _--images_dir_ (or _-d_) flag:
+- To choose another image directory, use the `--images_dir` (or `-d`) flag:
 
 ```bash
 python3 resize_images.py --images_dir "path/to/images"
@@ -73,13 +73,13 @@ python3 resize_images.py --images_dir "path/to/images"
 
 - **All the images** in the chosen directory will be resized to the same largest dimension size.
 
-- The resized images will be saved to _'./imgs/resized'_ by default. To choose another destination, use the _--resized_dir_ (or _-r_) flag:
+- The resized images will be saved to `./imgs/resized` by default. To choose another destination, use the `--resized_dir` (or `-r`) flag:
 
 ```bash
 python3 resize_images.py --resized_dir "path/to/resized"
 ```
 
-- The file _./log.txt_ will be used (when necessary) to output extra informations, like:
+- The file `./log.txt` will be used (when necessary) to output extra informations, like:
 
   - Warning whether any non image file is present in the images directory.
 
