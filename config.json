@@ -1,0 +1,10 @@
+{
+  "default_args": {
+    "encoding": "utf-8",
+    "language": "es_AR",
+    "images_dir": "./imgs",
+    "resized_dir": "./imgs/resized",
+    "log_file": "log.txt",
+    "size": null
+  }
+}
