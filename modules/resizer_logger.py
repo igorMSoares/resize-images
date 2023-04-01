@@ -11,11 +11,11 @@ class ResizerLogger:
     @classmethod
     def init(cls, log_file='log.txt'):
         try:
-            ResizerLogger.validate(log_file)
-            ResizerLogger.log_file = log_file
+            cls.validate(log_file)
+            cls.log_file = log_file
 
             logging.basicConfig(
-                filename=ResizerLogger.log_file,
+                filename=cls.log_file,
                 filemode='w',
                 encoding=Messages.encoding,
                 level=logging.INFO,
@@ -24,10 +24,10 @@ class ResizerLogger:
         except FileNotFoundError as error:
             error_message = f'[{error}] Using "log.txt" instead'
 
-            ResizerLogger.log_file = 'log.txt'
+            cls.log_file = 'log.txt'
 
             print(error_message)
-            ResizerLogger.write_log('warning', error_message)
+            cls.write_log('warning', error_message)
 
     @classmethod
     def validate(cls, log_file):
@@ -37,12 +37,12 @@ class ResizerLogger:
 
     @classmethod
     def something_in_log(cls):
-        if not ResizerLogger.log_has_something:
-            ResizerLogger.log_has_something = True
+        if not cls.log_has_something:
+            cls.log_has_something = True
 
     @classmethod
     def write_log(cls, level, message):
-        if not ResizerLogger.log_file:
-            ResizerLogger.init()
+        if not cls.log_file:
+            cls.init()
         log = getattr(logging, level)
         log(message)

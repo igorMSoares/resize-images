@@ -11,14 +11,14 @@ class Messages:
 
     @classmethod
     def set_language(cls, lang, encoding='utf-8'):
-        if Messages.validate_language(lang) and Messages.validate_encoding(encoding):
-            Messages.language = lang
-            Messages.encoding = encoding
+        if cls.validate_language(lang) and cls.validate_encoding(encoding):
+            cls.language = lang
+            cls.encoding = encoding
 
     @classmethod
     def validate_language(cls, language):
-        if language not in Messages.available_languages():
-            raise ValueError(Messages.output("invalid_language_error")
+        if language not in cls.available_languages():
+            raise ValueError(cls.output("invalid_language_error")
                                 .format(language = language))
         else:
             return True
@@ -28,15 +28,15 @@ class Messages:
         try:
             codecs.lookup(encoding)
         except LookupError:
-            raise ValueError(Messages.output("invalid_encoding_error")
+            raise ValueError(cls.output("invalid_encoding_error")
                                 .format(encoding = encoding))
         else:
             return True
 
     @classmethod
     def translated_messages(cls) -> dict:
-        language_file = f'{Messages.languages_dir}/{Messages.language}.json'
-        with open(language_file, "r", encoding=Messages.encoding) as json_file:
+        language_file = f'{cls.languages_dir}/{cls.language}.json'
+        with open(language_file, "r", encoding=cls.encoding) as json_file:
             return json.load(json_file)
 
     @classmethod
@@ -44,7 +44,7 @@ class Messages:
         """Iterates languages_dir and returns an array with all the
         languages available (E.g.: ['pt_BR', 'en_US', 'es_AR'])"""
 
-        json_files_path = list(Path(Messages.languages_dir).glob('*.json'))
+        json_files_path = list(Path(cls.languages_dir).glob('*.json'))
 
         # Removes '.json' from file names
         json_files: list[str]
@@ -57,6 +57,6 @@ class Messages:
     @classmethod
     def output(cls, message, singular_or_plural=""):
         if singular_or_plural:
-            return Messages.translated_messages()[message][singular_or_plural]
+            return cls.translated_messages()[message][singular_or_plural]
         else:
-            return Messages.translated_messages()[message]
+            return cls.translated_messages()[message]
