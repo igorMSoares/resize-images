@@ -2,11 +2,12 @@ import codecs
 import json
 import re
 from pathlib import Path
+from .config import Config
 
 class Messages:
     languages_dir = './language'
-    language = 'pt_BR'
-    encoding = 'utf-8'
+    language = Config.default_args()["language"]
+    encoding = Config.default_args()["encoding"]
 
     @classmethod
     def set_language(cls, lang, encoding='utf-8'):
@@ -17,7 +18,8 @@ class Messages:
     @classmethod
     def validate_language(cls, language):
         if language not in Messages.available_languages():
-            raise ValueError(f'"{language}" is not available in {Messages.languages_dir}')
+            raise ValueError(Messages.output("invalid_language_error")
+                                .format(language = language))
         else:
             return True
 
@@ -25,8 +27,9 @@ class Messages:
     def validate_encoding(cls, encoding):
         try:
             codecs.lookup(encoding)
-        except LookupError as error:
-            raise error
+        except LookupError:
+            raise ValueError(Messages.output("invalid_encoding_error")
+                                .format(encoding = encoding))
         else:
             return True
 

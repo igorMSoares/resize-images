@@ -12,14 +12,16 @@ class ImageResizer:
     @classmethod
     def validate_directory(cls, directory):
         if not os.path.isdir(directory):
-            raise FileNotFoundError(f'"{directory}" is not a valid directory.')
+            raise FileNotFoundError(
+                Messages.output('invalid_dir_error')
+                .format(directory = directory))
 
     @classmethod
     def validate_size(cls, size):
         if not re.match(cls.size_validation_regex, size):
             raise ValueError(
                 Messages.output('invalid_data_error')
-                .format(input_value=size))
+                .format(input_value = size))
 
     @classmethod
     def get_largest_dimension(cls, input_message, error_message, try_again_message=""):
@@ -37,7 +39,7 @@ class ImageResizer:
 
         input_value = input(input_message)
         while not re.match(cls.size_validation_regex, input_value):
-            print(error_message.format(input_value=input_value))
+            print(error_message.format(input_value = input_value))
 
             if not try_again_message:
                 try_again_message = input_message

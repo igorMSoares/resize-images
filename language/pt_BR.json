@@ -1,25 +1,25 @@
 {
+  "invalid_language_error": "O idioma \"{language}\" não está disponível.\n",
+  "default_lang_error_msg": "O idioma padrão é: \"{default_lang}\".\n",
+  "invalid_data_error": "\n[ERRO] \"{input_value}\" não é um tamanho válido.",
+  "invalid_dir_error": "\"{directory}\" não é um diretório válido.\n",
+  "enter_dir_again": "Execute {main_file_name} novamente e utilize {dir_flag} para especificar um diretório válido.\n",
+  "invalid_encoding_error": "Encoding inválido: \"{encoding}\".\n",
+  "default_enc_error_msg": "Usando encoding padrão: \"{default_encoding}\".\n",
+  "invalid_log_file_error": "\"{log_path}\" não é um caminho válido.\n",
+  "default_log_error_msg": "Usando o log padrão: \"{default_log}\".\n",
   "date_format": "%d/%b/%Y %H:%M:%S",
-
-  "enter_data": "Qual tamanho, em pixels, deverá ter o maior lado da imagem? (A proporção será mantida)\n",
-
-  "invalid_data_error": "\n[ERRO] \"{input_value}\" não é um número válido. Tente novamente.",
-
-  "enter_data_again": "Qual tamanho, em pixels, deverá ter o maior lado da imagem? (Ex.: 1200px)\n",
-
+  "enter_data": "Qual tamanho, em pixels, deverá ter o maior lado da imagem? (A proporção será mantida).\n",
+  "enter_data_again": "Qual tamanho, em pixels, deverá ter o maior lado da imagem? (Ex.: 1200px).\n",
   "file_not_resized": "\"{file_name}\" não foi redimensionado.\n\"{new_largest_dimension}px\" é maior do que o tamanho original da imagem: ({img_width}px,{img_height}px)",
-
-  "non_image_error": "{error} (não é um arquivo de imagem válido)\n",
-
+  "non_image_error": "{error} (não é um arquivo de imagem válido).\n",
   "final_message": {
-                    "singular": "\n{total_files_resized} arquivo redimensionado",
-                    "plural": "\n{total_files_resized} arquivos redimensionados"
-                  },
-
+    "singular": "\n{total_files_resized} arquivo redimensionado",
+    "plural": "\n{total_files_resized} arquivos redimensionados"
+  },
   "saved_to": {
-                "singular": " e salvo na pasta \"{resized_images_dir}\"",
-                "plural": " e salvos na pasta \"{resized_images_dir}\""
-              },
-
+    "singular": " e salvo na pasta \"{resized_images_dir}\"",
+    "plural": " e salvos na pasta \"{resized_images_dir}\""
+  },
   "check_the_log": "Acesse o arquivo \"{log_file}\" para mais informações"
 }

@@ -1,25 +1,25 @@
 {
+  "invalid_language_error": "\"{language}\" language is not available.\n",
+  "default_lang_error_msg": "\"{default_lang}\" is the default language.\n",
+  "invalid_data_error": "\n[ERROR] \"{input_value}\" is not a valid size.",
+  "invalid_dir_error": "\"{directory}\" is not a valid directory.\n",
+  "enter_dir_again": "Run {main_file_name} again and use the {dir_flag} option to specify a valid directory.\n",
+  "invalid_encoding_error": "Invalid encoding: \"{encoding}\".\n",
+  "default_enc_error_msg": "\"{default_encoding}\" is the default encoding.\n",
+  "invalid_log_file_error": "\"{log_path}\" is not a valid path.\n",
+  "default_log_error_msg": "Using \"{default_log}\" instead.\n",
   "date_format": "%b-%d-%Y %I:%M:%S %p",
-
   "enter_data": "What size, in pixels, should the image's largest dimension have? (Aspect Ratio will be preserved)\n",
-
-  "invalid_data_error": "\n[ERROR] \"{input_value}\" is not a valid number. Try again.",
-
   "enter_data_again": "What size, in pixels, should the image's largest dimension have? (E.g.: 1200px)\n",
-
   "file_not_resized": "\"{file_name}\" was not resized.\n\"{new_largest_dimension}px\" is larger than the original image's size: ({img_width}px,{img_height}px)",
-
   "non_image_error": "{error} (it's not a valid image file)\n",
-
   "final_message": {
-                    "singular": "\n{total_files_resized} file resized",
-                    "plural": "\n{total_files_resized} files resized"
-                  },
-
+    "singular": "\n{total_files_resized} file resized",
+    "plural": "\n{total_files_resized} files resized"
+  },
   "saved_to": {
-                "singular": " and saved to \"{resized_images_dir}\"",
-                "plural": " and saved to \"{resized_images_dir}\""
-              },
-
+    "singular": " and saved to \"{resized_images_dir}\"",
+    "plural": " and saved to \"{resized_images_dir}\""
+  },
   "check_the_log": "Check the \"{log_file}\" for more information"
 }

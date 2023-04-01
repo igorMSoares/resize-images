@@ -32,7 +32,8 @@ class ResizerLogger:
     @classmethod
     def validate(cls, log_file):
         if not Path(os.path.dirname(log_file)).exists():
-            raise FileNotFoundError(f'"{log_file}" is not a valid path. ')
+            raise FileNotFoundError(Messages.output("invalid_log_file_error").
+                                        format(log_path = log_file))
 
     @classmethod
     def something_in_log(cls):

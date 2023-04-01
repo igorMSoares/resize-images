@@ -1,25 +1,25 @@
 {
+  "invalid_language_error": "El idioma \"{language}\" no está disponible.\n",
+  "default_lang_error_msg": "\"{default_lang}\" es el idioma predeterminado.\n",
+  "invalid_data_error": "\n[ERROR] \"{input_value}\" no es un tamaño válido.",
+  "invalid_dir_error": "\"{directory}\" no es un directorio válido.\n",
+  "enter_dir_again": "Ejecute {main_file_name} otra ves utilizando la opción {dir_flag} para especificar un directorio válido.\n",
+  "invalid_encoding_error": "Encoding inválido: \"{encoding}\".\n",
+  "default_enc_error_msg": "\"{default_encoding}\" es el encoding predeterminado.\n",
+  "invalid_log_file_error": "\"{log_path}\" no es una ruta de archivo válida.\n",
+  "default_log_error_msg": "Utilizando el archivo predeterminado: \"{default_log}\".\n",
   "date_format": "%d/%b/%Y %H:%M:%S",
-
   "enter_data": "Cual tamaño, en pixeles, para la dimension más larga? (Las proporciones no cambiarán)\n",
-
-  "invalid_data_error": "\n[ERROR] \"{input_value}\" no es un numero valido, intenta otra vez.",
-
   "enter_data_again": "Cual tamaño, en pixeles, será la dimension más larga? (P.ej.: 1200px)\n",
-
   "file_not_resized": "Las dimensiones de \"{file_name}\" no cambiaron.\n\"{new_largest_dimension}px\" es mas largo que las dimensiones originales: ({img_width}px,{img_height}px)",
-
   "non_image_error": "{error} (no es un archivo de imagen)\n",
-
   "final_message": {
-                    "singular": "\n{total_files_resized} archivo redimensionado",
-                    "plural": "\n{total_files_resized} archivos redimensionados"
-                  },
-
+    "singular": "\n{total_files_resized} archivo redimensionado",
+    "plural": "\n{total_files_resized} archivos redimensionados"
+  },
   "saved_to": {
-                "singular": " y guardado en \"{resized_images_dir}\"",
-                "plural": " y guardados en \"{resized_images_dir}\""
-              },
-
+    "singular": " y guardado en \"{resized_images_dir}\"",
+    "plural": " y guardados en \"{resized_images_dir}\""
+  },
   "check_the_log": "Acceder al archivo \"{log_file}\" para más detalles"
 }
