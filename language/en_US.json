@@ -6,7 +6,7 @@
   "enter_dir_again": "Run {main_file_name} again and use the {dir_flag} option to specify a valid directory.\n",
   "invalid_encoding_error": "Invalid encoding: \"{encoding}\".\n",
   "default_enc_error_msg": "\"{default_encoding}\" is the default encoding.\n",
-  "invalid_log_file_error": "\"{log_path}\" is not a valid path.\n",
+  "invalid_log_file_error": "\"{log_path}\" is not a valid path for the log file.\n",
   "default_log_error_msg": "Using \"{default_log}\" instead.\n",
   "date_format": "%b-%d-%Y %I:%M:%S %p",
   "enter_data": "What size, in pixels, should the image's largest dimension have? (Aspect Ratio will be preserved)\n",

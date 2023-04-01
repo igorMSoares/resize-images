@@ -6,7 +6,7 @@
   "enter_dir_again": "Execute {main_file_name} novamente e utilize {dir_flag} para especificar um diretório válido.\n",
   "invalid_encoding_error": "Encoding inválido: \"{encoding}\".\n",
   "default_enc_error_msg": "Usando encoding padrão: \"{default_encoding}\".\n",
-  "invalid_log_file_error": "\"{log_path}\" não é um caminho válido.\n",
+  "invalid_log_file_error": "\"{log_path}\" não é um caminho válido para o arquivo de log.\n",
   "default_log_error_msg": "Usando o log padrão: \"{default_log}\".\n",
   "date_format": "%d/%b/%Y %H:%M:%S",
   "enter_data": "Qual tamanho, em pixels, deverá ter o maior lado da imagem? (A proporção será mantida).\n",

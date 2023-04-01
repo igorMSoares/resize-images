@@ -6,7 +6,7 @@
   "enter_dir_again": "Ejecute {main_file_name} otra ves utilizando la opción {dir_flag} para especificar un directorio válido.\n",
   "invalid_encoding_error": "Encoding inválido: \"{encoding}\".\n",
   "default_enc_error_msg": "\"{default_encoding}\" es el encoding predeterminado.\n",
-  "invalid_log_file_error": "\"{log_path}\" no es una ruta de archivo válida.\n",
+  "invalid_log_file_error": "\"{log_path}\" no es una ruta de archivo válida para el archivo de log.\n",
   "default_log_error_msg": "Utilizando el archivo predeterminado: \"{default_log}\".\n",
   "date_format": "%d/%b/%Y %H:%M:%S",
   "enter_data": "Cual tamaño, en pixeles, para la dimension más larga? (Las proporciones no cambiarán)\n",
