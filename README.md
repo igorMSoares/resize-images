@@ -16,10 +16,10 @@ Any suggestions and improvements will be most welcome! :wink:
 
 It **maintains the aspect ratio** and **orientation** of the original images, but it only resizes to **smaller** sizes, as it's intended to reduce large photo files and also to avoid quality loss by enlarging images.
 
-The language of all the output messages can be set using the `--language` (or `-l`) flag in the command line. (Default language is `pt_BR`)
+The language of all the output messages can be set using the `--language` (or `-l`) flag in the command line. (Default language is `en_US`)
 
 ```bash
-python3 resize_images.py --language en_US
+python3 resize_images.py --language pt_BR
 ```
 
 For now, **pt_BR**, **es_AR** and **en_US** are already available. New languages can be added by creating a `ll_LL.json` file under the `./language` directory. More information about that in the [./language/README.md](./language/README.md)
@@ -40,11 +40,11 @@ pip install -r requirements.txt
 - Copy all the image files you want to resize to `./imgs/` and run `resize_images.py` :
 
 ```bash
-# pt_BR is the default language:
+# en_US is the default language:
 python3 resize_images.py
 
-# in english:
-python3 resize_images.py -l en_US
+# em português:
+python3 resize_images.py -l pt_BR
 
 # en castellano:
 python3 resize_images.py -l es_AR
@@ -69,6 +69,14 @@ python3 resize_images.py --images_dir "path/to/images"
     > 1200
     ```
 
+- Or you can specify the new size for the images by using the `--size` (or `-s`) flag:
+
+```bash
+python3 resize_images.py --size 600
+python3 resize_images.py --size 600px
+python3 resize_images.py --size "600 px"
+```
+
 - Note that the user will only enter the size of the **largest dimension**, no matter whether it is _width_ or _height_, as the **aspect ratio is to be preserved**.
 
 - **All the images** in the chosen directory will be resized to the same largest dimension size.
@@ -92,3 +100,7 @@ To see all the options run:
 ```bash
 python3 resize_images.py -h
 ```
+
+## Default Config
+
+To change the default value for any of the command-line arguments, edit the `config.json` file.
