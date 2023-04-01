@@ -16,7 +16,10 @@ def main():
     images_dir = Arguments.args['images_dir']
     resized_dir = Arguments.args['resized_dir']
 
-    new_dimension = ImageResizer.get_largest_dimension(
+    if Arguments.args['size']:
+        new_dimension = int(Arguments.args['size'].strip('px'))
+    else:
+        new_dimension = ImageResizer.get_largest_dimension(
                         Messages.output('enter_data'),
                         Messages.output('invalid_data_error'),
                         Messages.output('enter_data_again'))
