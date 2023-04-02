@@ -31,8 +31,8 @@ class ImageResizer:
                 try_again_message = input_message
 
             input_value = input(try_again_message)
-        else:
-            return int(input_value.strip('px'))
+
+        return int(input_value.strip('px'))
 
     @classmethod
     def resize_all(cls, images_dir, resized_dir, new_largest_dimension):
