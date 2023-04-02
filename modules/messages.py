@@ -2,6 +2,7 @@ import codecs
 import json
 import re
 from pathlib import Path
+
 from .config import Config
 
 class Messages:

@@ -4,7 +4,7 @@ import sys
 
 from .messages import Messages
 from .resizer_logger import ResizerLogger
-from .image_resizer import ImageResizer
+from .validators import validate_directory, validate_size, validate_language, validate_encoding, validate_log_file
 from .config import Config
 
 class Arguments:
@@ -68,7 +68,7 @@ class Arguments:
 
         def language_validator():
             try:
-                Messages.validate_language(cls.args["language"])
+                validate_language(cls.args["language"])
             except ValueError as error:
                 default_lang = cls.default_args["language"]
                 error_message = f'{error}{Messages.output("default_lang_error_msg").format(default_lang = default_lang)}'
@@ -79,7 +79,7 @@ class Arguments:
 
         def images_dir_validator():
             try:
-                ImageResizer.validate_directory(cls.args["images_dir"])
+                validate_directory(cls.args["images_dir"])
             except FileNotFoundError as error:
                 error_message = (f'{error}{Messages.output("enter_dir_again").format(main_file_name = os.path.basename(sys.argv[0]), dir_flag = cls.IMAGES_DIR_FLAG)}')
                 write_to_log_and_terminal(error_message)
@@ -87,7 +87,7 @@ class Arguments:
 
         def resized_dir_validator():
             try:
-                ImageResizer.validate_directory(cls.args["resized_dir"])
+                validate_directory(cls.args["resized_dir"])
             except FileNotFoundError as error:
                 error_message = (f'{error}{Messages.output("enter_dir_again").format(main_file_name = os.path.basename(sys.argv[0]), dir_flag = cls.RESIZED_DIR_FLAG)}')
                 write_to_log_and_terminal(error_message)
@@ -95,7 +95,7 @@ class Arguments:
 
         def encoding_validator():
             try:
-                Messages.validate_encoding(cls.args["encoding"])
+                validate_encoding(cls.args["encoding"])
             except ValueError as error:
                 default_encoding = cls.default_args["encoding"]
                 error_message = f'{error}{Messages.output("default_enc_error_msg").format(default_encoding = default_encoding)}'
@@ -105,7 +105,7 @@ class Arguments:
 
         def log_file_validator():
             try:
-                ResizerLogger.validate(cls.args["log_file"])
+                validate_log_file(cls.args["log_file"])
             except FileNotFoundError as error:
                 default_log = cls.default_args["log_file"]
                 error_message = f'{error}{Messages.output("default_log_error_msg").format(default_log = default_log)}'
@@ -116,7 +116,7 @@ class Arguments:
         def size_validator():
             if cls.args["size"]:
                 try:
-                    ImageResizer.validate_size(cls.args["size"])
+                    validate_size(cls.args["size"])
                 except ValueError as error:
                     write_to_log_and_terminal(error)
                     sys.exit(1);

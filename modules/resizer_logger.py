@@ -1,39 +1,40 @@
 import logging
-import os
-from pathlib import Path
 
 from .messages import Messages
+from .validators import validate_log_file
+from .config import Config
 
 class ResizerLogger:
+    validation_error = None
     log_has_something = False
     log_file = ''
+    default_log_file = Config.default_args()['log_file']
 
     @classmethod
-    def init(cls, log_file='log.txt'):
-        try:
-            cls.validate(log_file)
-            cls.log_file = log_file
-
-            logging.basicConfig(
-                filename=cls.log_file,
-                filemode='w',
-                encoding=Messages.encoding,
-                level=logging.INFO,
-                format='%(asctime)s\n%(levelname)s: %(message)s\n',
-                datefmt=Messages.output("date_format"))
-        except FileNotFoundError as error:
-            error_message = f'[{error}] Using "log.txt" instead'
-
-            cls.log_file = 'log.txt'
-
-            print(error_message)
-            cls.write_log('warning', error_message)
+    def init(cls, log_file=default_log_file):
+        cls.log_file = log_file if cls.validate(log_file) else cls.default_log_file
+            
+        logging.basicConfig(
+            filename=cls.log_file,
+            filemode='w',
+            encoding=Messages.encoding,
+            level=logging.INFO,
+            format='%(asctime)s\n%(levelname)s: %(message)s\n',
+            datefmt=Messages.output("date_format"))
+        
+        if cls.validation_error:
+            error_msg = f'{cls.validation_error}{Messages.output("default_log_error_msg").format(default_log = cls.default_log_file)}'
+            print(error_msg)
+            cls.write_log('warning', error_msg)
 
     @classmethod
     def validate(cls, log_file):
-        if not Path(os.path.dirname(log_file)).exists():
-            raise FileNotFoundError(Messages.output("invalid_log_file_error").
-                                        format(log_path = log_file))
+        try:
+            validate_log_file(log_file)
+            return True
+        except FileNotFoundError as error:
+            cls.validation_error = error
+            return False
 
     @classmethod
     def something_in_log(cls):

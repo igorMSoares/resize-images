@@ -4,24 +4,10 @@ import re
 
 from .resizer_logger import ResizerLogger
 from .messages import Messages
+from .validators import SIZE_VALIDATION_REGEX
 
 class ImageResizer:
     total_files_resized = 0
-    size_validation_regex = r'^\d+\s?(px)?$'
-
-    @classmethod
-    def validate_directory(cls, directory):
-        if not os.path.isdir(directory):
-            raise FileNotFoundError(
-                Messages.output('invalid_dir_error')
-                .format(directory = directory))
-
-    @classmethod
-    def validate_size(cls, size):
-        if not re.match(cls.size_validation_regex, size):
-            raise ValueError(
-                Messages.output('invalid_data_error')
-                .format(input_value = size))
 
     @classmethod
     def get_largest_dimension(cls, input_message, error_message, try_again_message=""):
@@ -38,7 +24,7 @@ class ImageResizer:
         """
 
         input_value = input(input_message)
-        while not re.match(cls.size_validation_regex, input_value):
+        while not re.match(SIZE_VALIDATION_REGEX, input_value):
             print(error_message.format(input_value = input_value))
 
             if not try_again_message:
