@@ -7,12 +7,12 @@ from .config import Config
 class ResizerLogger:
     validation_error = None
     log_has_something = False
-    log_file = ''
-    default_log_file = Config.default_args()['log_file']
+    log_file = Config.default_args()['log_file']
 
     @classmethod
-    def init(cls, log_file=default_log_file):
-        cls.log_file = log_file if cls.validate(log_file) else cls.default_log_file
+    def init(cls, log_file=log_file):
+        if cls.validate(log_file):
+            cls.log_file = log_file 
             
         logging.basicConfig(
             filename=cls.log_file,
@@ -23,7 +23,7 @@ class ResizerLogger:
             datefmt=Messages.output("date_format"))
         
         if cls.validation_error:
-            error_msg = f'{cls.validation_error}{Messages.output("default_log_error_msg").format(default_log = cls.default_log_file)}'
+            error_msg = f'{cls.validation_error}{Messages.output("default_log_error_msg").format(default_log = cls.log_file)}'
             print(error_msg)
             cls.write_log('warning', error_msg)
 
