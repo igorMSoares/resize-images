@@ -12,9 +12,16 @@ class Messages:
 
     @classmethod
     def set_language(cls, lang, encoding='utf-8'):
-        if cls.validate_language(lang) and cls.validate_encoding(encoding):
+        try:
+            cls.validate_language(lang)
+            cls.validate_encoding(encoding)
+
             cls.language = lang
             cls.encoding = encoding
+        except ValueError as error:
+            print(error)
+            print(cls.output("default_lang_error_msg").format(default_lang = cls.language))
+            print(cls.output("default_enc_error_msg").format(default_encoding = cls.encoding))
 
     @classmethod
     def validate_language(cls, language):
