@@ -6,6 +6,7 @@ from .resizer_logger import ResizerLogger
 from .messages import Messages
 from .validators import SIZE_VALIDATION_REGEX
 
+
 class ImageResizer:
     total_files_resized = 0
 
@@ -25,7 +26,7 @@ class ImageResizer:
 
         input_value = input(input_message)
         while not re.match(SIZE_VALIDATION_REGEX, input_value):
-            print(error_message.format(input_value = input_value))
+            print(error_message.format(input_value=input_value))
 
             if not try_again_message:
                 try_again_message = input_message
@@ -47,20 +48,23 @@ class ImageResizer:
         """
 
         for file_name in os.listdir(images_dir):
-            file_path = f'{images_dir}/{file_name}'
+            file_path = os.path.join(images_dir, file_name)
 
             if os.path.isfile(file_path) and not file_name == '.gitignore':
                 try:
                     with Image.open(file_path) as image:
-                        image = ImageOps.exif_transpose(image)  # Maintains orientation
+                        image = ImageOps.exif_transpose(
+                            image)  # Maintains orientation
 
                         if new_largest_dimension > max(image.size):
-                            ResizerLogger.write_log('info', Messages.output("file_not_resized").format(
-                                file_name=file_name,
-                                new_largest_dimension=new_largest_dimension,
-                                img_width=image.width,
-                                img_height=image.height
-                            ))
+                            ResizerLogger.write_log(
+                                'info',
+                                Messages.output("file_not_resized").format(
+                                    file_name=file_name,
+                                    new_largest_dimension=new_largest_dimension,
+                                    img_width=image.width,
+                                    img_height=image.height
+                                ))
                             ResizerLogger.something_in_log()
                         else:
                             # Resizes image and maintains the aspect ratio
@@ -72,5 +76,6 @@ class ImageResizer:
                             cls.total_files_resized += 1
 
                 except UnidentifiedImageError as error:
-                    ResizerLogger.write_log('warning', Messages.output("non_image_error").format(error=error))
+                    ResizerLogger.write_log('warning', Messages.output(
+                        "non_image_error").format(error=error))
                     ResizerLogger.something_in_log()
