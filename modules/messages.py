@@ -5,8 +5,9 @@ from pathlib import Path
 
 from .config import Config
 
+
 class Messages:
-    languages_dir = './language'
+    languages_dir = Path('.') / 'language'
     language = Config.default_args()["language"]
     encoding = Config.default_args()["encoding"]
 
@@ -20,14 +21,16 @@ class Messages:
             cls.encoding = encoding
         except ValueError as error:
             print(error)
-            print(cls.output("default_lang_error_msg").format(default_lang = cls.language))
-            print(cls.output("default_enc_error_msg").format(default_encoding = cls.encoding))
+            print(cls.output("default_lang_error_msg").format(
+                default_lang=cls.language))
+            print(cls.output("default_enc_error_msg").format(
+                default_encoding=cls.encoding))
 
     @classmethod
     def validate_language(cls, language):
         if language not in cls.available_languages():
             raise ValueError(cls.output("invalid_language_error")
-                                .format(language = language))
+                                .format(language=language))
         else:
             return True
 
@@ -37,13 +40,13 @@ class Messages:
             codecs.lookup(encoding)
         except LookupError:
             raise ValueError(cls.output("invalid_encoding_error")
-                                .format(encoding = encoding))
+                                .format(encoding=encoding))
         else:
             return True
 
     @classmethod
     def translated_messages(cls) -> dict:
-        language_file = f'{cls.languages_dir}/{cls.language}.json'
+        language_file = Path(cls.languages_dir) / Path(f'{cls.language}.json')
         with open(language_file, "r", encoding=cls.encoding) as json_file:
             return json.load(json_file)
 
